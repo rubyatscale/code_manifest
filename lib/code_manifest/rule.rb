@@ -31,7 +31,7 @@ module CodeManifest
         matched = Dir.glob(glob, GLOB_OPTIONS)
         matched.map! { |file| Pathname.new(file) }
         matched.reject!(&:directory?)
-        matched.map! { |file| file.relative_path_from(@root.expand_path) }
+        matched.map! { |file| file.relative_path_from(@root.expand_path).to_s }
         Set.new(matched.sort!)
       end
     end

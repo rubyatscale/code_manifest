@@ -29,9 +29,10 @@ module CodeManifest
     def manifests
       @manifests ||= begin
         config_file = traverse_files(DOTFILE, Dir.pwd)
-        root = Pathname.new(config_file).dirname
 
         raise "#{DOTFILE} was not found in your project directory, please check README for instructions." unless config_file
+
+        root = Pathname.new(config_file).dirname
 
         YAML.load_file(config_file).each_with_object({}) do |(name, patterns), collection|
           next unless name.match?(KEY_PATTERN)
