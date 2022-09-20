@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'set'
+require 'digest/md5'
 require_relative 'rule'
 
 module CodeManifest

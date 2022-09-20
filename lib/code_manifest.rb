@@ -15,15 +15,6 @@ module CodeManifest
       manifests[name.to_s]
     end
 
-    def []=(name, manifest)
-      name = name.to_s
-      if manifests.key?(name)
-        raise ArgumentError, "manifest #{name} already exists"
-      end
-
-      manifests[name] = manifest
-    end
-
     private
 
     def manifests
@@ -36,6 +27,10 @@ module CodeManifest
 
         YAML.load_file(config_file).each_with_object({}) do |(name, patterns), collection|
           next unless name.match?(KEY_PATTERN)
+
+          if collection.key?(name)
+            raise ArgumentError, "#{name} defined multiple times in #{DOTFILE}"
+          end
 
           collection[name] = Manifest.new(root, patterns)
         end

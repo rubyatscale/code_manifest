@@ -1,0 +1,8 @@
+foo:
+  - spec/fixtures/foo/**/*
+bar:
+  - spec/fixtures/foo/bar.txt
+no_bar:
+  - spec/fixtures/foo/**/*
+  - '!spec/fixtures/foo/bar*'
+
