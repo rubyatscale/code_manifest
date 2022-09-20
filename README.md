@@ -1,8 +1,6 @@
 # CodeManifest
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/code_manifest`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Simple manifest to fetch file by globs and generate digest.
 
 ## Installation
 
@@ -16,13 +14,28 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-TODO: Write usage instructions here
+Put a `.code_manifest.yml` config file under your project root, for example:
 
-## Development
+```yml
+ruby:
+  - app/**/*.rb
+js:
+  - frontend/**/*.js
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Then use it with:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```ruby
+require 'code_manifest'
+
+# Returns a `Set` with filepaths
+CodeManifest['ruby'].files
+CodeManifest['js'].files
+
+# Returns a digest based on all files specified under same namespace
+CodeManifest['ruby'].digest
+CodeManifest['js'].digest
+```
 
 ## Contributing
 
