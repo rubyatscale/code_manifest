@@ -13,15 +13,11 @@ Gem::Specification.new do |spec|
   spec.homepage = "https://github.com/rubyatscale/code_manifest"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.7")
 
-  spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
-
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/rubyatscale/code_manifest"
-  spec.metadata["changelog_uri"] = "https://github.com/rubyatscale/code_manifest/blob/main/CHANGLOG.md"
+  spec.metadata["changelog_uri"] = "https://github.com/rubyatscale/code_manifest/blob/main/releases"
 
-  spec.files         = Dir["VERSION", "CHANGELOG.md", "LICENSE.txt", "README.md", "lib/**/*", "bin/**/*"]
-  spec.bindir        = "exe"
-  spec.executables   = Dir["exe/*"].map { |exe| File.basename(exe) }
+  spec.files         = Dir["README.md", "lib/**/*"]
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem
