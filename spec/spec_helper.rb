@@ -98,4 +98,15 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  config.around do |example|
+    FileUtils.cp_r('spec/fixtures/project', 'tmp')
+    Dir.chdir('tmp/project') do
+      # Reset the root.
+      CodeManifest.root(reset: true)
+
+      example.run
+    end
+    FileUtils.rm_rf('tmp/project')
+  end
 end

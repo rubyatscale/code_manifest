@@ -7,12 +7,11 @@ module CodeManifest
   class Manifest
     GLOB_OPTIONS = File::FNM_PATHNAME | File::FNM_DOTMATCH | File::FNM_EXTGLOB
 
-    attr_reader :root, :rules
+    attr_reader :rules
 
-    def initialize(root, patterns)
-      @root = root
+    def initialize(patterns)
       @rules ||= patterns.map do |pattern|
-        Rule.new(root, pattern)
+        Rule.new(CodeManifest.root, pattern)
       end
     end
 
@@ -22,16 +21,20 @@ module CodeManifest
 
     def digest
       @digest ||= begin
-        digests = files.map { |file| Digest::MD5.file(root.join(file)).hexdigest }
+        digests = files.map { |file| Digest::MD5.file(CodeManifest.root.join(file)).hexdigest }
         Digest::MD5.hexdigest(digests.join).freeze
       end
     end
 
     def matches(paths)
-      result_paths = paths.select { |path| inclusion_rules.any? { |rule| rule.match?(path) } }
-      result_paths.reject! { |path| exclusion_files.any? { |rule| rule.match?(path) } }
+      result_paths = paths.select do |path|
+        inclusion_rules.any? { |rule| rule.match?(path) }
+      end
+      result_paths.reject! do |path|
+        exclusion_files.any? { |rule| rule.match?(path) }
+      end
 
-      result_paths
+      result_paths.sort!
     end
 
     private
@@ -56,7 +59,8 @@ module CodeManifest
       files.map do |file|
         pathname = Pathname.new(file)
         next if pathname.directory?
-        pathname.relative_path_from(root.expand_path).to_s
+
+        pathname.relative_path_from(CodeManifest.root).to_s
       end.compact
     end
   end

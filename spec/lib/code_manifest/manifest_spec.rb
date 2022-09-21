@@ -4,38 +4,31 @@ require 'pathname'
 require 'fileutils'
 
 RSpec.describe CodeManifest::Manifest do
-  let(:root) { Pathname.new('tmp/manifest_spec').expand_path }
+  let(:root) { CodeManifest.root }
 
   describe '#files' do
-    let(:patterns) { ['/foo', 'bar/*', '!bar/exclude'] }
-    let(:manifest) { described_class.new(root.expand_path, patterns) }
+    let(:patterns) { ['/foo/foo.md', 'bar/*', '!bar/exclude'] }
+    let(:manifest) { described_class.new(patterns) }
 
     around do |example|
-      root.mkpath
-      FileUtils.touch(root.join('foo'))
       root.join('bar').mkpath
       FileUtils.touch(root.join('bar/include'))
       FileUtils.touch(root.join('bar/exclude'))
       example.run
-      root.rmtree
     end
 
     it 'returns only included files' do
-      expect(manifest.files).to match_array(['bar/include', 'foo'])
+      expect(manifest.files).to match_array(['bar/include', 'foo/foo.md'])
     end
 
     context 'with different type of globs' do
       let(:patterns) { ['dir_bar/**/*'] }
-      let(:manifest) { described_class.new(root.expand_path, patterns) }
+      let(:manifest) { described_class.new(patterns) }
 
       around do |example|
-        Dir.mktmpdir do |tmp_dir|
-          Dir.chdir(tmp_dir) do
-            FileUtils.mkdir(root.join('dir_bar'))
-            FileUtils.touch(root.join('dir_bar/foo'))
-            example.run
-          end
-        end
+        FileUtils.mkdir(root.join('dir_bar'))
+        FileUtils.touch(root.join('dir_bar/foo'))
+        example.run
       end
 
       it 'excludes directories' do
@@ -63,7 +56,7 @@ RSpec.describe CodeManifest::Manifest do
 
           expected = [
             'dir_bar/.bar',
-            'dir_bar/foo',
+            'dir_bar/foo'
           ]
 
           expect(manifest.files).to match_array(expected)
@@ -80,7 +73,7 @@ RSpec.describe CodeManifest::Manifest do
 
           expected = [
             'foo.x',
-            'foo.y',
+            'foo.y'
           ]
 
           expect(manifest.files).to match_array(expected)
@@ -91,7 +84,7 @@ RSpec.describe CodeManifest::Manifest do
 
   describe '#digest' do
     let(:patterns) { ['/foo', 'bar/*', '!bar/exclude'] }
-    let(:manifest) { described_class.new(root.expand_path, patterns) }
+    let(:manifest) { described_class.new(patterns) }
 
     around do |example|
       root.mkpath
@@ -104,13 +97,13 @@ RSpec.describe CodeManifest::Manifest do
     end
 
     it 'returns only included files' do
-      expect(manifest.digest).to eq('020eb29b524d7ba672d9d48bc72db455')
+      expect(manifest.digest).to eq('74be16979710d4c4e7c6647856088456')
     end
   end
 
   describe '#matches' do
     let(:patterns) { ['/foo', 'bar/*', '!bar/exclude'] }
-    let(:manifest) { described_class.new(root.expand_path, patterns) }
+    let(:manifest) { described_class.new(patterns) }
     let(:paths) do
       [
         'bar/exclude',
@@ -135,9 +128,9 @@ RSpec.describe CodeManifest::Manifest do
 
     it 'returns matched paths' do
       expect(manifest.matches(paths)).to match_array([
-        'bar/iniclude',
-        'foo',
-      ])
+                                                       'bar/iniclude',
+                                                       'foo'
+                                                     ])
     end
   end
 end

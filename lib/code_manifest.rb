@@ -8,7 +8,7 @@ require_relative 'code_manifest/manifest'
 module CodeManifest
   class Error < StandardError; end
 
-  DOTFILE = '.code_manifest.yml'
+  MANIFEST_FILE = '.code_manifest.yml'
   KEY_PATTERN = /[a-z_0-9]+/.freeze
 
   class << self
@@ -16,40 +16,39 @@ module CodeManifest
       manifests[name.to_s]
     end
 
+    def root(start_path: Dir.pwd, reset: false)
+      @root = nil if reset
+      @root ||= find_root(start_path)
+    end
+
     private
 
     def manifests
       @manifests ||= begin
-        manifest_file = traverse_files(DOTFILE, Dir.pwd)
-
-        unless manifest_file
-          raise "#{DOTFILE} was not found in your project directory, please check README for instructions."
-        end
-
-        root = Pathname.new(manifest_file).dirname
+        manifest_file = root.join(MANIFEST_FILE)
 
         load_manifest(manifest_file).each_with_object({}) do |(name, patterns), collection|
           next unless name.match?(KEY_PATTERN)
 
-          raise ArgumentError, "#{name} defined multiple times in #{DOTFILE}" if collection.key?(name)
+          raise ArgumentError, "#{name} defined multiple times in #{MANIFEST_FILE}" if collection.key?(name)
 
-          collection[name] = Manifest.new(root, patterns.flatten)
+          collection[name] = Manifest.new(patterns.flatten)
         end
       end
     end
 
-    def traverse_files(filename, start_dir)
-      Pathname.new(start_dir).expand_path.ascend do |dir|
-        file = dir.join(filename)
-        return file.to_s if file.exist?
+    def find_root(path)
+      Pathname.new(path).expand_path.ascend do |dir|
+        return dir if dir.join(MANIFEST_FILE).exist?
       end
+
+      raise "#{MANIFEST_FILE} was not found in your project directory, please check README for instructions."
     end
 
     # https://stackoverflow.com/a/71192990
     def load_manifest(file)
       YAML.load_file(file, aliases: true)
     rescue ArgumentError
-      puts YAML.load_file(file)
       YAML.load_file(file)
     end
   end

@@ -1,0 +1,7 @@
+foo: &foo
+  - "/foo/**/*"
+bar:
+  - "/foo/bar.txt"
+no_bar:
+  - "*foo"
+  - "!spec/fixtures/foo/bar*"
