@@ -20,15 +20,15 @@ module CodeManifest
 
     def manifests
       @manifests ||= begin
-        config_file = traverse_files(DOTFILE, Dir.pwd)
+        manifest_file = traverse_files(DOTFILE, Dir.pwd)
 
-        unless config_file
+        unless manifest_file
           raise "#{DOTFILE} was not found in your project directory, please check README for instructions."
         end
 
-        root = Pathname.new(config_file).dirname
+        root = Pathname.new(manifest_file).dirname
 
-        YAML.load_file(config_file).each_with_object({}) do |(name, patterns), collection|
+        load_manifest(manifest_file).each_with_object({}) do |(name, patterns), collection|
           next unless name.match?(KEY_PATTERN)
 
           raise ArgumentError, "#{name} defined multiple times in #{DOTFILE}" if collection.key?(name)
@@ -43,6 +43,13 @@ module CodeManifest
         file = dir.join(filename)
         return file.to_s if file.exist?
       end
+    end
+
+    # https://stackoverflow.com/a/71192990
+    def load_manifest(file)
+      YAML.load_file(file, aliases: true)
+    rescue ArgumentError
+      YAML.load_file(source)
     end
   end
 end
