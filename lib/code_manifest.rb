@@ -49,7 +49,7 @@ module CodeManifest
     def load_manifest(file)
       YAML.load_file(file, aliases: true)
     rescue ArgumentError
-      YAML.load_file(source)
+      YAML.load_file(file)
     end
   end
 end

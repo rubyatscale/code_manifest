@@ -28,15 +28,16 @@ module CodeManifest
     end
 
     def matches(paths)
-      # loop over inclusion rules, keep matches, throw out non-matches
-      # loop over exclusion rules, throw out matches
-      # return results
+      result_paths = paths.select { |path| inclusion_rules.any? { |rule| rule.match?(path) } }
+      result_paths.reject! { |path| exclusion_files.any? { |rule| rule.match?(path) } }
+
+      result_paths
     end
 
     private
 
     def inclusion_files
-      @inclusion_files ||= Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS)
+      @inclusion_files ||= files_with_relative_path(Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS))
     end
 
     def inclusion_rules
@@ -44,11 +45,19 @@ module CodeManifest
     end
 
     def exclusion_files
-      @exclusion_files ||= Dir.glob(exclusion_rules.map(&:glob), GLOB_OPTIONS)
+      @exclusion_files ||= files_with_relative_path(Dir.glob(exclusion_rules.map(&:glob), GLOB_OPTIONS))
     end
 
     def exclusion_rules
       @exclusion_rules ||= rules.select(&:exclude)
+    end
+
+    def files_with_relative_path(files)
+      files.map do |file|
+        pathname = Pathname.new(file)
+        next if pathname.directory?
+        pathname.relative_path_from(root.expand_path).to_s
+      end.compact
     end
   end
 end
