@@ -27,7 +27,7 @@ module CodeManifest
     end
 
     def matches(paths)
-      result_paths = paths.select do |path|
+      result_paths = Array(paths).select do |path|
         inclusion_rules.any? { |rule| rule.match?(path) }
       end
       result_paths.reject! do |path|
