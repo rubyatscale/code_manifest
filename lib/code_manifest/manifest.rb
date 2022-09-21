@@ -27,6 +27,12 @@ module CodeManifest
       end
     end
 
+    def matches(paths)
+      # loop over inclusion rules, keep matches, throw out non-matches
+      # loop over exclusion rules, throw out matches
+      # return results
+    end
+
     private
 
     def inclusion_files
