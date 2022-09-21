@@ -17,6 +17,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'code_manifest'
+require 'fileutils'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -100,6 +101,7 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.around do |example|
+    FileUtils.mkdir_p('tmp')
     FileUtils.cp_r('spec/fixtures/project', 'tmp')
     Dir.chdir('tmp/project') do
       # Reset the root.

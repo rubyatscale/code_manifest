@@ -4,4 +4,4 @@ bar:
   - "/foo/bar.txt"
 no_bar:
   - "*foo"
-  - "!spec/fixtures/foo/bar*"
+  - "!foo/bar*"
