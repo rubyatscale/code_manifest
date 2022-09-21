@@ -33,7 +33,7 @@ module CodeManifest
 
           raise ArgumentError, "#{name} defined multiple times in #{DOTFILE}" if collection.key?(name)
 
-          collection[name] = Manifest.new(root, patterns)
+          collection[name] = Manifest.new(root, patterns.flatten)
         end
       end
     end
@@ -49,6 +49,7 @@ module CodeManifest
     def load_manifest(file)
       YAML.load_file(file, aliases: true)
     rescue ArgumentError
+      puts YAML.load_file(file)
       YAML.load_file(file)
     end
   end
