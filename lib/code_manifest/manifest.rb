@@ -10,7 +10,7 @@ module CodeManifest
     attr_reader :rules
 
     def initialize(patterns)
-      @rules ||= patterns.map do |pattern|
+      @rules ||= Array(patterns).map do |pattern|
         Rule.new(CodeManifest.root, pattern)
       end
     end
