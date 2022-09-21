@@ -1,42 +1,44 @@
 # frozen_string_literal: true
 
-require 'set'
 require 'digest/md5'
 require_relative 'rule'
 
 module CodeManifest
   class Manifest
-    attr_reader :root
+    GLOB_OPTIONS = File::FNM_PATHNAME | File::FNM_DOTMATCH | File::FNM_EXTGLOB
+
+    attr_reader :root, :rules
 
     def initialize(root, patterns)
       @root = root
-      @patterns = patterns.map(&:to_s)
+      @rules ||= patterns.map do |pattern|
+        Rule.new(root, pattern)
+      end
     end
 
     def files
-      @files ||= (inclusion_rules.map(&:files).reduce(Set.new, :merge) - exclusion_rules.map(&:files).reduce(Set.new, :merge)).sort.to_set
+      @files ||= (inclusion_files - exclusion_files).sort!.freeze
     end
 
     def digest
       @digest ||= begin
         digests = files.map { |file| Digest::MD5.file(root.join(file)).hexdigest }
-        Digest::MD5.hexdigest(digests.join)
+        Digest::MD5.hexdigest(digests.join).freeze
       end
     end
 
     private
 
-    def rules
-      @rules ||= @patterns.each_with_object([]) do |pattern, rules|
-        pattern = pattern.strip
-        unless pattern.match?(/\A(#|\z)/)
-          rules << Rule.new(root, pattern)
-        end
-      end
+    def inclusion_files
+      @inclusion_files ||= Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS)
     end
 
     def inclusion_rules
       @inclusion_rules ||= rules.reject(&:exclude)
+    end
+
+    def exclusion_files
+      @exclusion_files ||= Dir.glob(exclusion_rules.map(&:glob), GLOB_OPTIONS)
     end
 
     def exclusion_rules

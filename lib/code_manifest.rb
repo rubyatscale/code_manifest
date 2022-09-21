@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
+require 'pathname'
 require 'yaml'
-require_relative "code_manifest/version"
-require_relative "code_manifest/manifest"
+require_relative 'code_manifest/version'
+require_relative 'code_manifest/manifest'
 
 module CodeManifest
   class Error < StandardError; end
 
-  DOTFILE = '.code_manifest.yml'.freeze
+  DOTFILE = '.code_manifest.yml'
   KEY_PATTERN = /[a-z_0-9]+/.freeze
 
   class << self
@@ -21,16 +22,16 @@ module CodeManifest
       @manifests ||= begin
         config_file = traverse_files(DOTFILE, Dir.pwd)
 
-        raise "#{DOTFILE} was not found in your project directory, please check README for instructions." unless config_file
+        unless config_file
+          raise "#{DOTFILE} was not found in your project directory, please check README for instructions."
+        end
 
         root = Pathname.new(config_file).dirname
 
         YAML.load_file(config_file).each_with_object({}) do |(name, patterns), collection|
           next unless name.match?(KEY_PATTERN)
 
-          if collection.key?(name)
-            raise ArgumentError, "#{name} defined multiple times in #{DOTFILE}"
-          end
+          raise ArgumentError, "#{name} defined multiple times in #{DOTFILE}" if collection.key?(name)
 
           collection[name] = Manifest.new(root, patterns)
         end
