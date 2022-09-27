@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/rubyatscale/code_manifest"
-  spec.metadata["changelog_uri"] = "https://github.com/rubyatscale/code_manifest/blob/main/releases"
+  spec.metadata["changelog_uri"] = "https://github.com/rubyatscale/code_manifest/releases"
 
   spec.files         = Dir["README.md", "lib/**/*"]
   spec.require_paths = ["lib"]
