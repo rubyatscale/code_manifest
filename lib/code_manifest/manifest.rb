@@ -56,12 +56,13 @@ module CodeManifest
     end
 
     def files_with_relative_path(files)
-      files.map do |file|
-        pathname = Pathname.new(file)
-        next if pathname.directory?
+      prefix = File.join(CodeManifest.root, "/")
 
-        pathname.relative_path_from(CodeManifest.root).to_s
-      end.compact
+      files.filter_map do |file|
+        next if File.directory?(file)
+
+        file.delete_prefix(prefix)
+      end
     end
   end
 end
