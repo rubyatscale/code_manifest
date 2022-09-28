@@ -16,7 +16,13 @@ module CodeManifest
     end
 
     def files
-      @files ||= (inclusion_files - exclusion_files).sort!.freeze
+      @files ||= begin
+        inclusion_files = Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS)
+        inclusion_files.delete_if do |file|
+          exclusion_rules.any? { |rule| rule.match?(file) }
+        end
+        files_with_relative_path(inclusion_files).sort!.freeze
+      end
     end
 
     def digest
@@ -31,7 +37,7 @@ module CodeManifest
         inclusion_rules.any? { |rule| rule.match?(path) }
       end
       result_paths.reject! do |path|
-        exclusion_files.any? { |rule| rule.match?(path) }
+        exclusion_rules.any? { |rule| rule.match?(path) }
       end
 
       result_paths.sort!
@@ -39,16 +45,8 @@ module CodeManifest
 
     private
 
-    def inclusion_files
-      @inclusion_files ||= files_with_relative_path(Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS))
-    end
-
     def inclusion_rules
       @inclusion_rules ||= rules.reject(&:exclude)
-    end
-
-    def exclusion_files
-      @exclusion_files ||= files_with_relative_path(Dir.glob(exclusion_rules.map(&:glob), GLOB_OPTIONS))
     end
 
     def exclusion_rules
