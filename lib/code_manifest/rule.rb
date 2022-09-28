@@ -4,27 +4,27 @@ module CodeManifest
   class Rule
     attr_reader :exclude, :glob
 
-    def initialize(root, pattern)
-      @root = root
+    def initialize(pattern)
       @exclude = false
-      @glob = @root
+      @glob = pattern
 
-      if pattern.start_with?('!')
+      if glob.start_with?("!")
         @exclude = true
-        pattern = pattern[1..-1]
+        @glob = glob.delete_prefix("!")
       end
 
-      if pattern.start_with?('/')
-        pattern = pattern[1..-1]
+      if File.absolute_path?(glob)
+        @glob = glob.delete_prefix(File::SEPARATOR)
       else
-        @glob = @glob.join('**')
+        @glob = File.join("**", glob)
       end
-
-      @glob = @glob.join(pattern).to_s
     end
 
     def match?(file)
-      file = File.join(@root, file) unless File.absolute_path?(file)
+      if File.absolute_path?(file)
+        prefix = File.join(CodeManifest.root, "/")
+        file = file.delete_prefix(prefix)
+      end
 
       File.fnmatch?(glob, file, Manifest::GLOB_OPTIONS)
     end

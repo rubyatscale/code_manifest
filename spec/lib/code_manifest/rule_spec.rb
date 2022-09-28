@@ -6,9 +6,9 @@ require 'set'
 require 'tmpdir'
 
 RSpec.describe CodeManifest::Rule do
-  let(:root) { Pathname.new('tmp/rule_spec').expand_path }
+  let(:root) { CodeManifest.root }
   let(:pattern) { '**/*' }
-  let(:rule) { described_class.new(root, pattern) }
+  let(:rule) { described_class.new(pattern) }
 
   describe '#exclude' do
     context 'when exclude pattern' do
@@ -31,7 +31,7 @@ RSpec.describe CodeManifest::Rule do
       let(:pattern) { '/foo' }
 
       it 'returns rooted glob' do
-        expect(rule.glob).to eq(root.join('foo').to_s)
+        expect(rule.glob).to eq('foo')
       end
     end
 
@@ -39,7 +39,7 @@ RSpec.describe CodeManifest::Rule do
       let(:pattern) { 'foo' }
 
       it 'returns non-rooted glob' do
-        expect(rule.glob).to eq(root.join('**/foo').to_s)
+        expect(rule.glob).to eq('**/foo')
       end
     end
   end

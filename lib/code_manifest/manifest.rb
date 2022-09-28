@@ -11,13 +11,13 @@ module CodeManifest
 
     def initialize(patterns)
       @rules ||= Array(patterns).map do |pattern|
-        Rule.new(CodeManifest.root, pattern)
+        Rule.new(pattern)
       end
     end
 
     def files
       @files ||= begin
-        inclusion_files = Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS)
+        inclusion_files = Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS, base: CodeManifest.root)
         inclusion_files.delete_if do |file|
           exclusion_rules.any? { |rule| rule.match?(file) }
         end
