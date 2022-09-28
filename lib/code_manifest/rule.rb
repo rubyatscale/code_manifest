@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'pathname'
-
 module CodeManifest
   class Rule
     attr_reader :exclude, :glob
@@ -26,10 +24,9 @@ module CodeManifest
     end
 
     def match?(file)
-      file = Pathname.new(file)
-      file = @root.join(file) unless file.absolute?
+      file = File.join(@root, file) unless File.absolute_path?(file)
 
-      File.fnmatch?(glob, file.to_s, Manifest::GLOB_OPTIONS)
+      File.fnmatch?(glob, file, Manifest::GLOB_OPTIONS)
     end
   end
 end
