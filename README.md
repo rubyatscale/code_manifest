@@ -39,4 +39,4 @@ CodeManifest['js'].digest
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/code_manifest.
+Bug reports and pull requests are welcome on GitHub at https://github.com/rubyatscale/code_manifest.
