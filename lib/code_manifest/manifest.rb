@@ -43,6 +43,10 @@ module CodeManifest
       result_paths.sort!
     end
 
+    def matches_all?(paths)
+      matches(paths) == paths
+    end
+
     private
 
     def inclusion_rules
