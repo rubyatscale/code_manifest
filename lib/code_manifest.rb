@@ -26,9 +26,9 @@ module CodeManifest
 
       # https://stackoverflow.com/a/71192990
       yaml = begin
-        YAML.load_file(file, aliases: true)
+        YAML.load_file(manifest_file, aliases: true)
       rescue ArgumentError
-        YAML.load_file(file)
+        YAML.load_file(manifest_file)
       end
 
       yaml.each_with_object({}) do |(name, patterns), collection|
