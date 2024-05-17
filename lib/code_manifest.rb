@@ -21,17 +21,8 @@ module CodeManifest
       @root ||= find_root(start_path)
     end
 
-    def load_manifests_from_file(file = nil)
-      manifest_file = file || root.join(MANIFEST_FILE)
-
-      # https://stackoverflow.com/a/71192990
-      yaml = begin
-        YAML.load_file(manifest_file, aliases: true)
-      rescue ArgumentError
-        YAML.load_file(manifest_file)
-      end
-
-      yaml.each_with_object({}) do |(name, patterns), collection|
+    def load_file(manifest_file)
+      YAML.load_file(manifest_file, aliases: true).each_with_object({}) do |(name, patterns), collection|
         next unless name.match?(KEY_PATTERN)
 
         raise ArgumentError, "#{name} defined multiple times in #{manifest_file}" if collection.key?(name)
@@ -43,7 +34,7 @@ module CodeManifest
     private
 
     def manifests
-      @manifests ||= load_manifests_from_file
+      @manifests ||= load_file(root.join(MANIFEST_FILE))
     end
 
     def find_root(path)
