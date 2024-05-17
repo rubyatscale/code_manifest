@@ -21,20 +21,20 @@ module CodeManifest
       @root ||= find_root(start_path)
     end
 
+    def load_file(manifest_file)
+      YAML.load_file(manifest_file, aliases: true).each_with_object({}) do |(name, patterns), collection|
+        next unless name.match?(KEY_PATTERN)
+
+        raise ArgumentError, "#{name} defined multiple times in #{manifest_file}" if collection.key?(name)
+
+        collection[name] = Manifest.new(patterns.flatten)
+      end
+    end
+
     private
 
     def manifests
-      @manifests ||= begin
-        manifest_file = root.join(MANIFEST_FILE)
-
-        load_manifest(manifest_file).each_with_object({}) do |(name, patterns), collection|
-          next unless name.match?(KEY_PATTERN)
-
-          raise ArgumentError, "#{name} defined multiple times in #{MANIFEST_FILE}" if collection.key?(name)
-
-          collection[name] = Manifest.new(patterns.flatten)
-        end
-      end
+      @manifests ||= load_file(root.join(MANIFEST_FILE))
     end
 
     def find_root(path)
@@ -43,13 +43,6 @@ module CodeManifest
       end
 
       raise "#{MANIFEST_FILE} was not found in your project directory, please check README for instructions."
-    end
-
-    # https://stackoverflow.com/a/71192990
-    def load_manifest(file)
-      YAML.load_file(file, aliases: true)
-    rescue ArgumentError
-      YAML.load_file(file)
     end
   end
 end
