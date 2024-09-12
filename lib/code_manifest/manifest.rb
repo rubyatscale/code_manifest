@@ -44,7 +44,7 @@ module CodeManifest
     end
 
     def matches_all?(paths)
-      matches(paths) == paths
+      matches(paths).size == paths.size
     end
 
     private
