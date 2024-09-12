@@ -17,14 +17,9 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "https://github.com/rubyatscale/code_manifest"
   spec.metadata["changelog_uri"] = "https://github.com/rubyatscale/code_manifest/releases"
 
-  spec.files         = Dir["README.md", "lib/**/*"]
-  spec.require_paths = ["lib"]
+  spec.files = Dir["README.md", "lib/**/*"]
 
-  # Uncomment to register a new dependency of your gem
   spec.add_dependency "psych", ">= 4.0.0"
 
   spec.add_development_dependency 'rspec', '~> 3.0'
-
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://bundler.io/guides/creating_gem.html
 end
