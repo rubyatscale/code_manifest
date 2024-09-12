@@ -18,11 +18,8 @@ module CodeManifest
 
     def files
       @files ||= begin
-        inclusion_files = Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS, base: CodeManifest.root)
-        inclusion_files.delete_if do |file|
-          exclusion_rules.any? { |rule| rule.match?(file) }
-        end
-        files_with_relative_path(inclusion_files).sort!.freeze
+        matched_files = matches(Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS, base: CodeManifest.root))
+        files_with_relative_path(matched_files).freeze
       end
     end
 
@@ -35,13 +32,16 @@ module CodeManifest
 
     def matches(paths)
       Array(paths).select do |path|
-        if @cache.key?(path)
-          @cache.fetch(path)
-        else
-          @cache[path] =
-            inclusion_rules.any? { |rule| rule.match?(path) } &&
-            exclusion_rules.none? { |rule| rule.match?(path) }
-        end
+        cached_match =
+          if @cache.key?(path)
+            @cache.fetch(path)
+          else
+            @cache[path] = [
+              inclusion_rules.any? { |rule| rule.match?(path) },
+              exclusion_rules.any? { |rule| rule.match?(path) }
+            ]
+          end
+        cached_match.first && !cached_match.last
       end.sort!
     end
 
