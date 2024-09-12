@@ -7,24 +7,35 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    diff-lcs (1.5.0)
+    debug (1.9.2)
+      irb (~> 1.10)
+      reline (>= 0.3.8)
+    diff-lcs (1.5.1)
+    io-console (0.7.2)
+    irb (1.14.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
     psych (5.1.2)
       stringio
-    rake (13.0.6)
-    rspec (3.11.0)
-      rspec-core (~> 3.11.0)
-      rspec-expectations (~> 3.11.0)
-      rspec-mocks (~> 3.11.0)
-    rspec-core (3.11.0)
-      rspec-support (~> 3.11.0)
-    rspec-expectations (3.11.1)
+    rake (13.2.1)
+    rdoc (6.7.0)
+      psych (>= 4.0.0)
+    reline (0.5.10)
+      io-console (~> 0.5)
+    rspec (3.13.0)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.1)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.3)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.11.0)
-    rspec-mocks (3.11.1)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.11.0)
-    rspec-support (3.11.1)
-    stringio (3.1.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.1)
+    stringio (3.1.1)
 
 PLATFORMS
   arm64-darwin-21
@@ -34,8 +45,9 @@ PLATFORMS
 
 DEPENDENCIES
   code_manifest!
+  debug
   rake (~> 13.0)
-  rspec (~> 3.0)
+  rspec
 
 BUNDLED WITH
    2.5.4

@@ -13,6 +13,7 @@ module CodeManifest
       @rules ||= Array(patterns).map do |pattern|
         Rule.new(pattern)
       end
+      @cache = {}
     end
 
     def files
@@ -33,14 +34,15 @@ module CodeManifest
     end
 
     def matches(paths)
-      result_paths = Array(paths).select do |path|
-        inclusion_rules.any? { |rule| rule.match?(path) }
-      end
-      result_paths.reject! do |path|
-        exclusion_rules.any? { |rule| rule.match?(path) }
-      end
-
-      result_paths.sort!
+      Array(paths).select do |path|
+        if @cache.key?(path)
+          @cache.fetch(path)
+        else
+          @cache[path] =
+            inclusion_rules.any? { |rule| rule.match?(path) } &&
+            exclusion_rules.none? { |rule| rule.match?(path) }
+        end
+      end.sort!
     end
 
     def matches_all?(paths)
