@@ -107,30 +107,63 @@ RSpec.describe CodeManifest::Manifest do
     let(:paths) do
       [
         'bar/exclude',
-        'bar/iniclude',
+        'bar/include',
         'foo',
         'baz/baz.md'
       ]
     end
 
-    around do |example|
-      root.mkpath
-      root.join('bar').mkpath
-      root.join('baz').mkpath
-
-      paths.each do |path|
-        FileUtils.touch(root.join(path))
-      end
-
-      example.run
-      root.rmtree
-    end
-
     it 'returns matched paths' do
       expect(manifest.matches(paths)).to match_array([
-                                                       'bar/iniclude',
+                                                       'bar/include',
                                                        'foo'
                                                      ])
+    end
+
+    context 'caching concerns' do
+      let(:patterns) { ['/foo', '!bar/exclude'] }
+      let(:paths) { ['foo'] }
+
+      it 'caches rule lookups' do
+        include_rule = manifest.rules[0]
+        exclude_rule = manifest.rules[1]
+
+        expect(include_rule).to receive(:match?).with('foo').once.and_return(true)
+        expect(exclude_rule).to receive(:match?).with('foo').once.and_return(false)
+
+        manifest.matches(paths)
+        manifest.matches(paths)
+      end
+    end
+  end
+
+  describe '#matches_all?' do
+    let(:patterns) { ['/foo', 'bar/*', '!bar/exclude'] }
+    let(:manifest) { described_class.new(patterns) }
+    let(:paths) do
+      [
+        'foo',
+        'bar/include2',
+        'bar/include1',
+      ]
+    end
+
+    it 'returns true if all paths are matched' do
+      expect(manifest.matches_all?(paths)).to be(true)
+    end
+
+    context 'when not all paths are matched' do
+      let(:paths) do
+        [
+          'bar/include',
+          'bar/exclude',
+          'foo'
+        ]
+      end
+
+      it 'returns false' do
+        expect(manifest.matches_all?(paths)).to be(false)
+      end
     end
   end
 end
