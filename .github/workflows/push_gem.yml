@@ -1,9 +1,13 @@
-jobs:
+name: Publish to Rubygems
+on:
   push:
     branches:
       - "main"
     tags:
       - v*
+
+jobs:
+  push:
     name: Push gem to RubyGems.org
     runs-on: ubuntu-latest
 
