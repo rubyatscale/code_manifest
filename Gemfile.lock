@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    code_manifest (1.7.1)
+    code_manifest (1.8.0)
       psych (>= 4.0.0)
 
 GEM
