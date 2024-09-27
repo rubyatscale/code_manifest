@@ -28,13 +28,13 @@ Then use it with:
 ```ruby
 require 'code_manifest'
 
-# Returns a `Set` with filepaths
-CodeManifest['ruby'].files
-CodeManifest['js'].files
+# Returns an `Array` of filepaths
+CodeManifest[:ruby].files
+CodeManifest[:js].files
 
 # Returns a digest based on all files specified under same namespace
-CodeManifest['ruby'].digest
-CodeManifest['js'].digest
+CodeManifest[:ruby].digest
+CodeManifest[:js].digest
 ```
 
 ## Contributing
