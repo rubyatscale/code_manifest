@@ -21,6 +21,14 @@ RSpec.describe CodeManifest::Manifest do
       expect(manifest.files).to match_array(['bar/include', 'foo/foo.md'])
     end
 
+    context 'when there are duplicate patterns' do
+      let(:patterns) { ['/foo/foo.md', 'bar/*', '!bar/exclude', 'bar/*'] }
+
+      it 'dedups files' do
+        expect(manifest.files).to match_array(['bar/include', 'foo/foo.md'])
+      end
+    end
+
     context 'with different type of globs' do
       let(:patterns) { ['dir_bar/**/*'] }
       let(:manifest) { described_class.new(patterns) }
