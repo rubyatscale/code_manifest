@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    code_manifest (1.8.0)
+    code_manifest (1.9.0)
       psych (>= 4.0.0)
 
 GEM
@@ -50,4 +50,4 @@ DEPENDENCIES
   rspec
 
 BUNDLED WITH
-   2.5.4
+   2.5.23

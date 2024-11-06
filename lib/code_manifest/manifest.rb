@@ -18,7 +18,7 @@ module CodeManifest
 
     def files
       @files ||= begin
-        matched_files = matches(Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS, base: CodeManifest.root))
+        matched_files = matches(Dir.glob(inclusion_rules.map(&:glob), GLOB_OPTIONS, base: CodeManifest.root)).uniq
         files_with_relative_path(matched_files).freeze
       end
     end
