@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "A code manifest"
   spec.description = "A code manifest"
   spec.homepage = "https://github.com/rubyatscale/code_manifest"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.7")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.3")
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/rubyatscale/code_manifest"
