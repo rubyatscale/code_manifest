@@ -9,9 +9,9 @@ jobs:
       matrix:
         ruby:
           # See comment comes from https://github.com/ruby/setup-ruby#matrix-of-ruby-versions
-          - 3.3
-          - 3.4
-          - head
+          - '3.3'
+          - '3.4'
+          - '4.0'
     env:
       BUNDLE_GEMFILE: Gemfile
     name: "Tests: Ruby ${{ matrix.ruby }}"
