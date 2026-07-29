@@ -19,8 +19,6 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["README.md", "lib/**/*"]
 
-  spec.add_dependency "psych", ">= 4.0.0"
-
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'debug'
 end
