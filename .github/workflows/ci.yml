@@ -1,6 +1,12 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -24,3 +30,14 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
       - name: Run tests
         run: bundle exec rspec
+  rubyfmt:
+    name: "Rubyfmt"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@5126516654c75f76bca1de45dd82a3006d8890f9
+      - name: Install rubyfmt
+        run: |
+          curl -sL "https://github.com/fables-tales/rubyfmt/releases/download/v0.14.1/rubyfmt-v0.14.1-Linux-x86_64.tar.gz" | tar xz
+          sudo install -m 755 tmp/releases/v0.14.1-Linux/rubyfmt /usr/local/bin/rubyfmt
+      - name: Check formatting
+        run: rubyfmt --check lib/ spec/ Rakefile code_manifest.gemspec Gemfile bin/console

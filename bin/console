@@ -12,4 +12,5 @@ require "code_manifest"
 # Pry.start
 
 require "irb"
+
 IRB.start(__FILE__)

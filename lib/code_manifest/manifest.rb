@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-require 'digest/md5'
-require_relative 'rule'
+require "digest/md5"
+
+require_relative "rule"
 
 module CodeManifest
   class Manifest
@@ -13,6 +14,7 @@ module CodeManifest
       @rules ||= Array(patterns).map do |pattern|
         Rule.new(pattern)
       end
+
       @cache = {}
     end
 
@@ -31,9 +33,9 @@ module CodeManifest
     end
 
     def matches(paths)
-      Array(paths).select do |path|
-        cached_match =
-          if @cache.key?(path)
+      Array(paths)
+        .select do |path|
+          cached_match = if @cache.key?(path)
             @cache.fetch(path)
           else
             @cache[path] = [
@@ -41,8 +43,10 @@ module CodeManifest
               exclusion_rules.any? { |rule| rule.match?(path) }
             ]
           end
-        cached_match.first && !cached_match.last
-      end.sort!
+
+          cached_match.first && !cached_match.last
+        end
+        .sort!
     end
 
     def matches_all?(paths)

@@ -5,8 +5,8 @@ require_relative "lib/code_manifest/version"
 Gem::Specification.new do |spec|
   spec.name = "code_manifest"
   spec.version = CodeManifest::VERSION
-  spec.authors = ['Gusto Engineers']
-  spec.email = ['dev@gusto.com']
+  spec.authors = ["Gusto Engineers"]
+  spec.email = ["dev@gusto.com"]
 
   spec.summary = "A code manifest"
   spec.description = "A code manifest"
@@ -19,6 +19,6 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir["README.md", "lib/**/*"]
 
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'debug'
+  spec.add_development_dependency("rspec")
+  spec.add_development_dependency("debug")
 end
