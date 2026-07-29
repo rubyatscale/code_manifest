@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
-require 'pathname'
-require 'yaml'
-require_relative 'code_manifest/version'
-require_relative 'code_manifest/manifest'
+require "pathname"
+require "yaml"
+
+require_relative "code_manifest/version"
+require_relative "code_manifest/manifest"
 
 module CodeManifest
-  class Error < StandardError; end
+  class Error < StandardError
+  end
 
-  MANIFEST_FILE = '.code_manifest.yml'
+  MANIFEST_FILE = ".code_manifest.yml"
   KEY_PATTERN = /[a-z_0-9]+/.freeze
 
   class << self

@@ -16,15 +16,15 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-require 'code_manifest'
-require 'fileutils'
-require 'debug/prelude'
+require "code_manifest"
+require "fileutils"
+require "debug/prelude"
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
-  config.expect_with :rspec do |expectations|
+  config.expect_with(:rspec) do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods
     # defined using `chain`, e.g.:
@@ -37,7 +37,7 @@ RSpec.configure do |config|
 
   # rspec-mocks config goes here. You can use an alternate test double
   # library (such as bogus or mocha) by changing the `mock_with` option here.
-  config.mock_with :rspec do |mocks|
+  config.mock_with(:rspec) do |mocks|
     # Prevents you from mocking or stubbing a method that does not exist on
     # a real object. This is generally recommended, and will default to
     # `true` in RSpec 4.
@@ -56,7 +56,7 @@ RSpec.configure do |config|
   # is tagged with `:focus`, all examples get run. RSpec also provides
   # aliases for `it`, `describe`, and `context` that include `:focus`
   # metadata: `fit`, `fdescribe` and `fcontext`, respectively.
-  config.filter_run_when_matching :focus
+  config.filter_run_when_matching(:focus)
 
   # Allows RSpec to persist some state between runs in order to support
   # the `--only-failures` and `--next-failure` CLI options. We recommend
@@ -99,17 +99,18 @@ RSpec.configure do |config|
   # Setting this allows you to use `--seed` to deterministically reproduce
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
-  Kernel.srand config.seed
+  Kernel.srand(config.seed)
 
   config.around do |example|
-    FileUtils.mkdir_p('tmp')
-    FileUtils.cp_r('spec/fixtures/project', 'tmp')
-    Dir.chdir('tmp/project') do
+    FileUtils.mkdir_p("tmp")
+    FileUtils.cp_r("spec/fixtures/project", "tmp")
+    Dir.chdir("tmp/project") do
       # Reset the root.
       CodeManifest.root(reset: true)
 
       example.run
     end
-    FileUtils.rm_rf('tmp/project')
+
+    FileUtils.rm_rf("tmp/project")
   end
 end

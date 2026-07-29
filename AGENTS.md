@@ -14,6 +14,12 @@ bundle exec rspec
 
 # Run a single spec file
 bundle exec rspec spec/path/to/spec.rb
+
+# Format code with rubyfmt (requires the rubyfmt binary on PATH, e.g. `brew install rubyfmt`)
+rubyfmt -i lib/ spec/ Rakefile code_manifest.gemspec Gemfile bin/console
+
+# Check formatting without writing changes (this is what CI runs)
+rubyfmt --check lib/ spec/ Rakefile code_manifest.gemspec Gemfile bin/console
 ```
 
 ## Architecture
