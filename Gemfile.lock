@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     code_manifest (1.9.0)
-      psych (>= 4.0.0)
 
 GEM
   remote: https://rubygems.org/
