@@ -17,12 +17,16 @@ jobs:
 
     steps:
       # Set up
-      - uses: actions/checkout@v4
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          bundler-cache: true
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@14594264cd68ce8a2345dd349bc3d138a4ef85c8 # v1.327.0
+        with:
           ruby-version: ruby
+      # Not bundler-cache: a tag-triggered release shouldn't restore a cache other workflows can write.
+      - name: Install gems
+        run: bundle install
 
       # Release
-      - uses: rubygems/release-gem@v1
+      - uses: rubygems/release-gem@7f9650160c1a4e7989fdc9855807bdbd421d8b6b # v1.4.1
