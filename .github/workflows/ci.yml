@@ -23,8 +23,10 @@ jobs:
     name: "Tests: Ruby ${{ matrix.ruby }}"
     steps:
       - uses: actions/checkout@5126516654c75f76bca1de45dd82a3006d8890f9
+        with:
+          persist-credentials: false
       - name: Set up Ruby ${{ matrix.ruby }}
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@14594264cd68ce8a2345dd349bc3d138a4ef85c8 # v1.327.0
         with:
           bundler-cache: true
           ruby-version: ${{ matrix.ruby }}
@@ -35,8 +37,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@5126516654c75f76bca1de45dd82a3006d8890f9
+        with:
+          persist-credentials: false
       - name: Rubyfmt
-        uses: rubyatscale/rubyfmt-action@v1
+        uses: rubyatscale/rubyfmt-action@cf0cfc65bb8cab4c628ffea8662892598a48d6d3 # v1.0.0
         with:
           paths: |
             lib/
