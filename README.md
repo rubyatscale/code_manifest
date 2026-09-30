@@ -40,3 +40,7 @@ CodeManifest[:js].digest
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/rubyatscale/code_manifest.
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](LICENSE).
