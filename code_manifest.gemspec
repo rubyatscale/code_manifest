@@ -11,13 +11,14 @@ Gem::Specification.new do |spec|
   spec.summary = "A code manifest"
   spec.description = "A code manifest"
   spec.homepage = "https://github.com/rubyatscale/code_manifest"
+  spec.license = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 3.3")
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/rubyatscale/code_manifest"
   spec.metadata["changelog_uri"] = "https://github.com/rubyatscale/code_manifest/releases"
 
-  spec.files = Dir["README.md", "lib/**/*"]
+  spec.files = Dir["LICENSE", "README.md", "lib/**/*"]
 
   spec.add_development_dependency("rspec")
   spec.add_development_dependency("debug")
