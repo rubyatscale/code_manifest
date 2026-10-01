@@ -22,7 +22,7 @@ jobs:
       BUNDLE_GEMFILE: Gemfile
     name: "Tests: Ruby ${{ matrix.ruby }}"
     steps:
-      - uses: actions/checkout@5126516654c75f76bca1de45dd82a3006d8890f9
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
         with:
           persist-credentials: false
       - name: Set up Ruby ${{ matrix.ruby }}
@@ -36,7 +36,7 @@ jobs:
     name: "Rubyfmt"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@5126516654c75f76bca1de45dd82a3006d8890f9
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
         with:
           persist-credentials: false
       - name: Rubyfmt
